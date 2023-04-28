@@ -55,16 +55,16 @@ const keysEn = {
   Comma: ',',
   Period: '.',
   Slash: '/',
+  ArrowUp: 'ArrowUp',
   ShiftRight: 'Shift',
   // перенос
-  ControlLeft: 'Control',
-  MetaLeft: 'Meta',
+  ControlLeft: 'Ctrl',
+  MetaLeft: 'Win',
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ControlRight: 'Control',
+  ControlRight: 'Ctrl',
   ArrowLeft: 'ArrowLeft',
-  ArrowUp: 'ArrowUp',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
 };
@@ -124,16 +124,16 @@ const keysEnShift = {
   Comma: '<',
   Period: '>',
   Slash: '?',
+  ArrowUp: 'ArrowUp',
   ShiftRight: 'Shift',
   // перенос
-  ControlLeft: 'Control',
-  MetaLeft: 'Meta',
+  ControlLeft: 'Ctrl',
+  MetaLeft: 'Win',
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ControlRight: 'Control',
+  ControlRight: 'Ctrl',
   ArrowLeft: 'ArrowLeft',
-  ArrowUp: 'ArrowUp',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
 };
@@ -193,16 +193,16 @@ const keysRu = {
   Comma: 'б',
   Period: 'ю',
   Slash: '.',
+  ArrowUp: 'ArrowUp',
   ShiftRight: 'Shift',
   // перенос
-  ControlLeft: 'Control',
-  MetaLeft: 'Meta',
+  ControlLeft: 'Ctrl',
+  MetaLeft: 'Win',
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ControlRight: 'Control',
+  ControlRight: 'Ctrl',
   ArrowLeft: 'ArrowLeft',
-  ArrowUp: 'ArrowUp',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
 };
@@ -262,16 +262,16 @@ const keysRuShift = {
   Comma: 'Б',
   Period: 'Ю',
   Slash: ',',
+  ArrowUp: 'ArrowUp',
   ShiftRight: 'Shift',
   // перенос
-  ControlLeft: 'Control',
-  MetaLeft: 'Meta',
+  ControlLeft: 'Ctrl',
+  MetaLeft: 'Win',
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ControlRight: 'Control',
+  ControlRight: 'Ctrl',
   ArrowLeft: 'ArrowLeft',
-  ArrowUp: 'ArrowUp',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
 };
@@ -283,34 +283,121 @@ if (!lang) {
   lang = 'en';
 }
 
+// create the main container
+const container = document.createElement('main');
+container.classList.add('container');
+document.body.appendChild(container);
+
 // create and append titles
 const title = document.createElement('h1');
 title.textContent = 'Виртуальная клавиатура';
+title.classList.add('title');
 // title.textContent = lang === 'en' ? 'Virtual keyboard' : 'Виртуальная клавиатура';
 const subtitle = document.createElement('p');
 // subtitle.textContent = lang === 'en'
 //   ? 'The keyboard was created in the Windows operating system'
 //   : 'Клавиатура создана в операционной системе Windows';
 subtitle.textContent = 'Клавиатура создана в операционной системе Windows';
+subtitle.classList.add('subtitle');
 const info = document.createElement('p');
 info.textContent = 'Для переключения языка комбинация: левые Shift + Alt';
+info.classList.add('subtitle');
+container.appendChild(title);
+container.appendChild(subtitle);
+container.appendChild(info);
 
-document.body.appendChild(title);
-document.body.appendChild(subtitle);
-document.body.appendChild(info);
+// create textarea
+const text = document.createElement('textarea');
+text.classList.add('text');
+text.rows = 10;
+text.cols = 150;
+text.value = '';
+container.appendChild(text);
 
 let keyboard = lang === 'en' ? keysEn : keysRu;
 
-const keydiv = document.createElement('div');
+const keysContainer = document.createElement('div');
+keysContainer.classList.add('keyboard');
 
-for (const [key, value] of Object.entries(keyboard)) {
+function createBtn(key, value) {
   const item = document.createElement('button');
   item.textContent = value;
-  keydiv.appendChild(item);
+  item.dataset.key = key;
+  item.classList.add('keyboard__btn');
+
+  switch (key) {
+    case 'Backspace':
+      item.classList.add('keyboard__btn--backspace');
+      break;
+    case 'Tab':
+      item.classList.add('keyboard__btn--tab');
+      break;
+    case 'Backslash':
+      item.classList.add('keyboard__btn--tab');
+      break;
+    case 'CapsLock':
+      item.classList.add('keyboard__btn--capsLk');
+      break;
+    case 'Enter':
+      item.classList.add('keyboard__btn--enter');
+      break;
+    case 'ShiftLeft':
+      item.classList.add('keyboard__btn--shift');
+      break;
+    case 'ShiftRight':
+      item.classList.add('keyboard__btn--shift');
+      break;
+    case 'Space':
+      item.classList.add('keyboard__btn--space');
+      break;
+  }
+
+  return item;
+}
+function createRow() {
+  const row = document.createElement('div');
+  row.classList.add('keyboard__row');
+  return row;
+}
+
+let row = createRow();
+keysContainer.appendChild(row);
+for (const [key, value] of Object.entries(keyboard)) {
+    row.appendChild(createBtn(key, value));
   if (key === 'Backspace' || key === 'Backslash' || key === 'Enter' || key === 'ShiftRight') {
-    const newLine = document.createElement('br');
-    keydiv.appendChild(newLine);
+    row = createRow();
+    keysContainer.appendChild(row);
   }
 }
 
-document.body.appendChild(keydiv);
+container.appendChild(keysContainer);
+
+const btns = document.querySelectorAll('.keyboard__btn');
+
+document.addEventListener('keydown', (event) => {
+  event.preventDefault();
+  for (const btn of btns) {
+    const key = btn.getAttribute('data-key');
+    if (event.code === key) {
+      btn.classList.add('keyboard__btn--active');
+    }
+  }
+});
+
+document.addEventListener('keypress', (event) => {
+  event.preventDefault();
+  for (const btn of btns) {
+    const key = btn.getAttribute('data-key');
+    if (event.code === key) {
+      text.value = text.value + event.key;
+      // console.log(text.textContent);
+    }
+  }
+});
+
+document.addEventListener('keyup', (event) => {
+  event.preventDefault();
+  for (const btn of btns) {
+    btn.classList.remove('keyboard__btn--active');
+  }
+});
