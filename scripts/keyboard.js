@@ -11,8 +11,8 @@ import {
 } from './constants.js';
 
 const regExp = /^[a-z а-я]$/i;
-let isCapsLock = false;
-let isShift = false;
+export let isCapsLock = false;
+export let isShift = false;
 export const btns = [];
 
 export function changeCapsLk(element) {
