@@ -29,6 +29,7 @@ const keysEn = {
   BracketLeft: '[',
   BracketRight: ']',
   Backslash: '\\',
+  Delete: 'Del',
   // перенос
   CapsLock: 'CapsLock',
   KeyA: 'a',
@@ -98,6 +99,7 @@ const keysEnShift = {
   BracketLeft: '{',
   BracketRight: '}',
   Backslash: '|',
+  Delete: 'Del',
   // перенос
   CapsLock: 'CapsLock',
   KeyA: 'A',
@@ -167,6 +169,7 @@ const keysRu = {
   BracketLeft: 'х',
   BracketRight: 'ъ',
   Backslash: '\\',
+  Delete: 'Del',
   // перенос
   CapsLock: 'CapsLock',
   KeyA: 'ф',
@@ -236,6 +239,7 @@ const keysRuShift = {
   BracketLeft: 'Х',
   BracketRight: 'Ъ',
   Backslash: '/',
+  Delete: 'Del',
   // перенос
   CapsLock: 'CapsLock',
   KeyA: 'Ф',
@@ -311,8 +315,12 @@ const text = document.createElement('textarea');
 text.classList.add('text');
 text.rows = 10;
 text.cols = 150;
-text.value = '';
+text.textContent = '';
 container.appendChild(text);
+
+function updateInput(curValue) {
+  document.querySelector('.text').textContent += curValue;
+}
 
 let keyboard = lang === 'en' ? keysEn : keysRu;
 
@@ -328,18 +336,27 @@ function createBtn(key, value) {
   switch (key) {
     case 'Backspace':
       item.classList.add('keyboard__btn--backspace');
+      item.addEventListener('click', () => {
+        text.textContent = text.textContent.substring(0, text.textContent.length - 1);
+      });
       break;
     case 'Tab':
       item.classList.add('keyboard__btn--tab');
+      item.addEventListener('click', () => {
+        updateInput('\t');
+      });
       break;
-    case 'Backslash':
-      item.classList.add('keyboard__btn--tab');
+    case 'Delete':
+      console.log('delete');
       break;
     case 'CapsLock':
       item.classList.add('keyboard__btn--capsLk');
       break;
     case 'Enter':
       item.classList.add('keyboard__btn--enter');
+      item.addEventListener('click', () => {
+        updateInput('\n');
+      });
       break;
     case 'ShiftLeft':
       item.classList.add('keyboard__btn--shift');
@@ -349,7 +366,14 @@ function createBtn(key, value) {
       break;
     case 'Space':
       item.classList.add('keyboard__btn--space');
+      item.addEventListener('click', () => {
+        updateInput(' ');
+      });
       break;
+    default:
+      item.addEventListener('click', () => {
+        updateInput(item.textContent);
+      });
   }
 
   return item;
@@ -359,12 +383,22 @@ function createRow() {
   row.classList.add('keyboard__row');
   return row;
 }
+function updateKeyboard(keys) {
+  const btns = document.querySelectorAll('.keyboard__btn');
+  for (const btn of btns) {
+    for (const [key, value] of Object.entries(keys)) {
+      if (btn.getAttribute('data-key') === key) {
+        btn.textContent = value;
+      }
+    }
+  }
+}
 
 let row = createRow();
 keysContainer.appendChild(row);
 for (const [key, value] of Object.entries(keyboard)) {
     row.appendChild(createBtn(key, value));
-  if (key === 'Backspace' || key === 'Backslash' || key === 'Enter' || key === 'ShiftRight') {
+  if (key === 'Backspace' || key === 'Delete' || key === 'Enter' || key === 'ShiftRight') {
     row = createRow();
     keysContainer.appendChild(row);
   }
@@ -380,24 +414,21 @@ document.addEventListener('keydown', (event) => {
     const key = btn.getAttribute('data-key');
     if (event.code === key) {
       btn.classList.add('keyboard__btn--active');
+      updateInput(event.key);
+    }
+    if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') {
+      updateKeyboard(keysEnShift);
     }
   }
-});
-
-document.addEventListener('keypress', (event) => {
-  event.preventDefault();
-  for (const btn of btns) {
-    const key = btn.getAttribute('data-key');
-    if (event.code === key) {
-      text.value = text.value + event.key;
-      // console.log(text.textContent);
-    }
-  }
+  console.log(event.key);
 });
 
 document.addEventListener('keyup', (event) => {
   event.preventDefault();
   for (const btn of btns) {
     btn.classList.remove('keyboard__btn--active');
+  }
+  if (event.code === 'ShiftLeft' || event.code === 'ShiftRight') {
+    updateKeyboard(keysEn);
   }
 });
