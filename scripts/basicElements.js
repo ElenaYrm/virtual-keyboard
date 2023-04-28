@@ -1,4 +1,20 @@
-import { lang } from "./lang.js";
+import { lang } from './lang.js';
+
+export function updateTitles(language, h1, h2, h3) {
+  h1.textContent = language === 'en' ? 'Virtual keyboard' : 'Виртуальная клавиатура';
+
+  h2.textContent = language === 'en'
+    ? 'The keyboard was created in the Windows operating system'
+    : 'Клавиатура создана в операционной системе Windows';
+
+  h3.textContent = language === 'en'
+    ? 'To switch language press: left Shift + Alt'
+    : 'Для переключения языка комбинация: левые Shift + Alt';
+}
+
+export function updateInput(curValue) {
+  document.querySelector('.text').textContent += curValue;
+}
 
 // create the main container
 export const container = document.createElement('main');
@@ -15,19 +31,7 @@ container.appendChild(title);
 container.appendChild(subtitle);
 container.appendChild(info);
 
-updateTitles(lang);
-
-export function updateTitles(lang) {
-  title.textContent = lang === 'en' ? 'Virtual keyboard' : 'Виртуальная клавиатура';
-
-  subtitle.textContent = lang === 'en'
-    ? 'The keyboard was created in the Windows operating system'
-    : 'Клавиатура создана в операционной системе Windows';
-
-  info.textContent = lang === 'en'
-    ? 'To switch language press: left Shift + Alt'
-    :'Для переключения языка комбинация: левые Shift + Alt';
-}
+updateTitles(lang, title, subtitle, info);
 
 // create textarea
 export const textArea = document.createElement('textarea');
@@ -36,7 +40,3 @@ textArea.rows = 10;
 textArea.cols = 150;
 textArea.textContent = '';
 container.appendChild(textArea);
-
-export function updateInput(curValue) {
-  document.querySelector('.text').textContent += curValue;
-}

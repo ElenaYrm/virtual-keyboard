@@ -1,6 +1,4 @@
-import { keysEn, keysEnShift, keysRu, keysRuShift } from './constants.js';
-import { container, textArea, updateInput } from './basicElements.js';
-import { lang, updateLanguage } from './lang.js';
+import { container } from './basicElements.js';
 import { initKeyboard } from './keyboard.js';
 
 container.appendChild(initKeyboard());

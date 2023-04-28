@@ -1,11 +1,19 @@
-import {container, textArea, updateInput} from './basicElements.js';
-import {lang} from './lang.js';
-import {keysEn, keysEnShift, keysRu, keysRuShift} from './constants.js';
+import {
+  textArea,
+  updateInput,
+} from './basicElements.js';
+import { lang } from './lang.js';
+import {
+  keysEn,
+  keysEnShift,
+  keysRu,
+  keysRuShift,
+} from './constants.js';
 
 const regExp = /^[a-z а-я]$/i;
 let isCapsLock = false;
 let isShift = false;
-let btns = [];
+export const btns = [];
 
 export function changeCapsLk(element) {
   isCapsLock = !isCapsLock;
@@ -23,27 +31,27 @@ export function changeShift(element) {
     element.classList.remove('keyboard__btn--active');
   }
 }
-export function checkKeyboardType(lang, shift, capsLk) {
+export function checkKeyboardType(language, shift, capsLk) {
   let keyboard = keysEn;
-  if (lang === 'en' && shift) {
+  if (language === 'en' && shift) {
     keyboard = keysEnShift;
-  } else if (lang !== 'en' && shift) {
+  } else if (language !== 'en' && shift) {
     keyboard = keysRuShift;
-  } else if (lang !== 'en' && !shift) {
+  } else if (language !== 'en' && !shift) {
     keyboard = keysRu;
   }
   if (capsLk && !shift) {
     const items = Object.entries(keyboard);
     for (const [key, value] of items) {
       if (regExp.test(value)) {
-        keyboard[key] =  keyboard[key].toUpperCase();
+        keyboard[key] = keyboard[key].toUpperCase();
       }
     }
   } else if (!capsLk && !shift) {
     const items = Object.entries(keyboard);
     for (const [key, value] of items) {
       if (regExp.test(value)) {
-        keyboard[key] =  keyboard[key].toLowerCase();
+        keyboard[key] = keyboard[key].toLowerCase();
       }
     }
   }
@@ -53,7 +61,7 @@ export function checkKeyboardType(lang, shift, capsLk) {
 export function updateKeyboard(btnArray, keys) {
   const keyItems = Object.keys(keys);
   const valueItems = Object.values(keys);
-  for (let i = 0; i < btnArray.length; i++) {
+  for (let i = 0; i < btnArray.length; i + 1) {
     btnArray[i].dataset.key = keyItems[i];
     btnArray[i].textContent = valueItems[i];
   }
@@ -113,6 +121,16 @@ function createBtn(key, value) {
         updateInput(' ');
       });
       break;
+    case 'ControlLeft':
+      break;
+    case 'ControlRight':
+      break;
+    case 'AltLeft':
+      break;
+    case 'AltRight':
+      break;
+    case 'MetaLeft':
+      break;
     default:
       item.addEventListener('click', () => {
         updateInput(item.textContent);
@@ -131,7 +149,7 @@ export function initKeyboard() {
   const keysContainer = document.createElement('div');
   keysContainer.classList.add('keyboard');
 
-  let keyboard = checkKeyboardType(lang, isShift, isCapsLock);
+  const keyboard = checkKeyboardType(lang, isShift, isCapsLock);
   let row = createRow();
   keysContainer.appendChild(row);
   for (const [key, value] of Object.entries(keyboard)) {

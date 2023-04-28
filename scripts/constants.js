@@ -56,7 +56,7 @@ export const keysEn = {
   Comma: ',',
   Period: '.',
   Slash: '/',
-  ArrowUp: 'ArrowUp',
+  ArrowUp: '⇧',
   ShiftRight: 'Shift',
   // перенос
   ControlLeft: 'Ctrl',
@@ -64,9 +64,9 @@ export const keysEn = {
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ArrowLeft: 'ArrowLeft',
-  ArrowDown: 'ArrowDown',
-  ArrowRight: 'ArrowRight',
+  ArrowLeft: '⇦',
+  ArrowDown: '⇩',
+  ArrowRight: '⇨',
   ControlRight: 'Ctrl',
 };
 export const keysEnShift = {
@@ -126,7 +126,7 @@ export const keysEnShift = {
   Comma: '<',
   Period: '>',
   Slash: '?',
-  ArrowUp: 'ArrowUp',
+  ArrowUp: '⇧',
   ShiftRight: 'Shift',
   // перенос
   ControlLeft: 'Ctrl',
@@ -134,9 +134,9 @@ export const keysEnShift = {
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ArrowLeft: 'ArrowLeft',
-  ArrowDown: 'ArrowDown',
-  ArrowRight: 'ArrowRight',
+  ArrowLeft: '⇦',
+  ArrowDown: '⇩',
+  ArrowRight: '⇨',
   ControlRight: 'Ctrl',
 };
 export const keysRu = {
@@ -196,7 +196,7 @@ export const keysRu = {
   Comma: 'б',
   Period: 'ю',
   Slash: '.',
-  ArrowUp: 'ArrowUp',
+  ArrowUp: '⇧',
   ShiftRight: 'Shift',
   // перенос
   ControlLeft: 'Ctrl',
@@ -204,9 +204,9 @@ export const keysRu = {
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ArrowLeft: 'ArrowLeft',
-  ArrowDown: 'ArrowDown',
-  ArrowRight: 'ArrowRight',
+  ArrowLeft: '⇦',
+  ArrowDown: '⇩',
+  ArrowRight: '⇨',
   ControlRight: 'Ctrl',
 };
 export const keysRuShift = {
@@ -266,7 +266,7 @@ export const keysRuShift = {
   Comma: 'Б',
   Period: 'Ю',
   Slash: ',',
-  ArrowUp: 'ArrowUp',
+  ArrowUp: '⇧',
   ShiftRight: 'Shift',
   // перенос
   ControlLeft: 'Ctrl',
@@ -274,8 +274,8 @@ export const keysRuShift = {
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ArrowLeft: 'ArrowLeft',
-  ArrowDown: 'ArrowDown',
-  ArrowRight: 'ArrowRight',
+  ArrowLeft: '⇦',
+  ArrowDown: '⇩',
+  ArrowRight: '⇨',
   ControlRight: 'Ctrl',
 };

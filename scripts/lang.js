@@ -1,4 +1,4 @@
-import { updateTitles } from "./basicElements.js";
+import { updateTitles } from './basicElements.js';
 
 // check saved language and set default language
 export let lang = localStorage.getItem('lang');
