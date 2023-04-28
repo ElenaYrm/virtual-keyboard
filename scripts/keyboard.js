@@ -97,12 +97,14 @@ function createBtn(key, value) {
       item.classList.add('keyboard__btn--shift');
       item.addEventListener('click', () => {
         changeShift(item);
+        updateKeyboard(btns, checkKeyboardType(lang, isShift, isCapsLock));
       });
       break;
     case 'ShiftRight':
       item.classList.add('keyboard__btn--shift');
       item.addEventListener('click', () => {
         changeShift(item);
+        updateKeyboard(btns, checkKeyboardType(lang, isShift, isCapsLock));
       });
       break;
     case 'Space':

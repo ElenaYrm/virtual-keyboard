@@ -64,10 +64,10 @@ export const keysEn = {
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ControlRight: 'Ctrl',
   ArrowLeft: 'ArrowLeft',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
+  ControlRight: 'Ctrl',
 };
 export const keysEnShift = {
   Backquote: '~',
@@ -134,10 +134,10 @@ export const keysEnShift = {
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ControlRight: 'Ctrl',
   ArrowLeft: 'ArrowLeft',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
+  ControlRight: 'Ctrl',
 };
 export const keysRu = {
   Backquote: 'ё',
@@ -204,10 +204,10 @@ export const keysRu = {
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ControlRight: 'Ctrl',
   ArrowLeft: 'ArrowLeft',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
+  ControlRight: 'Ctrl',
 };
 export const keysRuShift = {
   Backquote: 'Ё',
@@ -274,8 +274,8 @@ export const keysRuShift = {
   AltLeft: 'Alt',
   Space: ' ',
   AltRight: 'Alt',
-  ControlRight: 'Ctrl',
   ArrowLeft: 'ArrowLeft',
   ArrowDown: 'ArrowDown',
   ArrowRight: 'ArrowRight',
+  ControlRight: 'Ctrl',
 };
