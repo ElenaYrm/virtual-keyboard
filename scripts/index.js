@@ -1,17 +1,5 @@
 import Keyboard from './keyboard.js';
 
-// export function updateTitles(language, h1, h2, h3) {
-//   h1.textContent = language === 'en' ? 'Virtual keyboard' : 'Виртуальная клавиатура';
-//
-//   h2.textContent = language === 'en'
-//     ? 'The keyboard was created in the Windows operating system'
-//     : 'Клавиатура создана в операционной системе Windows';
-//
-//   h3.textContent = language === 'en'
-//     ? 'To switch language press: left Shift + Alt'
-//     : 'Для переключения языка комбинация: левые Shift + Alt';
-// }
-
 // create the main container
 export const container = document.createElement('main');
 container.classList.add('container');
