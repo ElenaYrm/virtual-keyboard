@@ -115,6 +115,10 @@ ul {
   width: 106px;
 }
 
+.keyboard__btn--active-capsLk {
+  background-color: green;
+}
+
 .keyboard__btn--enter {
   width: 106px;
 }
