@@ -152,8 +152,8 @@ ul {
 .keyboard__btn--capsLk:after {
   content: '';
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 10px;
+  right: 10px;
   width: 6px;
   height: 6px;
   border-radius: 100%;
@@ -181,6 +181,14 @@ ul {
 
 .keyboard__btn--arrow {
   background-color: var(--text-color);
+}
+
+.keyboard__btn--upper-case {
+  text-transform: uppercase;
+}
+
+.keyboard__btn--lower-case {
+  text-transform: lowercase;
 }
 
 .keyboard__btn--active {
