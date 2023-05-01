@@ -19,14 +19,14 @@ export default class Keyboard {
     this.currentRow = null;
     // array of node of keyboard buttons
     this.keysButtons = [];
+    // support data
+    this.isCapsLk = false;
+    this.isChangeCapsLk = false;
+    this.isLeftShift = false;
+    this.isRightShift = false;
+    this.isCtrl = false;
+    this.count = 0;
   }
-
-  isCapsLk = false;
-  isChangeCapsLk = false;
-  isLeftShift = false;
-  isRightShift = false;
-  isCtrl = false;
-  count = 0;
 
   initLanguage() {
     if (!localStorage.getItem('lang')) {
@@ -84,26 +84,49 @@ export default class Keyboard {
     // add event listener on click to buttons
     switch (key) {
       case 'Backspace':
-        btn.addEventListener('click', () => {
-          this.updateInput(this.inputValue.substring(0, this.inputValue.length - 1), true);
+        btn.addEventListener('click', (event) => {
+          event.preventDefault();
+          const posStart = this.input.selectionStart;
+          const posEnd = this.input.selectionEnd;
+          if (posStart !== 0) {
+            const newValue = this.inputValue.slice(0, posEnd - 1) + this.inputValue.slice(posEnd);
+            this.updateInput(newValue, true);
+          } else if (posStart === 0) {
+            return;
+          } else if (!document.getSelection().focusNode) {
+            this.updateInput(this.inputValue.substring(0, this.inputValue.length - 1), true);
+          }
+          this.input.focus();
+          this.input.setSelectionRange(posEnd - 1, posEnd - 1);
         });
         break;
       case 'Tab':
-        this.addClickBtn(btn, '    ');
+        this.addClickBtn(btn, '    ', 4);
         break;
       case 'Delete':
+        btn.addEventListener('click', (event) => {
+          event.preventDefault();
+          const posStart = this.input.selectionStart;
+          const posEnd = this.input.selectionEnd;
+          const newValue = this.inputValue.slice(0, posStart) + this.inputValue.slice(posStart + 1);
+          this.updateInput(newValue, true);
+          this.input.focus();
+          this.input.setSelectionRange(posEnd, posEnd);
+        });
         break;
       case 'CapsLock':
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', (event) => {
+          event.preventDefault();
           this.isCapsLk = !this.isCapsLk;
           this.checkCapsLk(btn);
         });
         break;
       case 'Enter':
-        this.addClickBtn(btn, '\n');
+        this.addClickBtn(btn, '\n', 1);
         break;
       case 'ShiftLeft':
-        btn.addEventListener('mousedown', () => {
+        btn.addEventListener('mousedown', (event) => {
+          event.preventDefault();
           if (this.count === 0) {
             this.isLeftShift = true;
             this.changeShift();
@@ -115,12 +138,14 @@ export default class Keyboard {
             this.checkCapsLk(btn);
           }
         });
-        btn.addEventListener('mouseup', () => {
+        btn.addEventListener('mouseup', (event) => {
+          event.preventDefault();
           this.resetShift(btn);
         });
         break;
       case 'ShiftRight':
-        btn.addEventListener('mousedown', () => {
+        btn.addEventListener('mousedown', (event) => {
+          event.preventDefault();
           if (this.count === 0) {
             this.isRightShift = true;
             this.changeShift();
@@ -132,12 +157,13 @@ export default class Keyboard {
             this.checkCapsLk(btn);
           }
         });
-        btn.addEventListener('mouseup', () => {
+        btn.addEventListener('mouseup', (event) => {
+          event.preventDefault();
           this.resetShift(btn);
         });
         break;
       case 'Space':
-        this.addClickBtn(btn, ' ');
+        this.addClickBtn(btn, ' ', 1);
         break;
       case 'ControlLeft':
         break;
@@ -150,7 +176,7 @@ export default class Keyboard {
       case 'MetaLeft':
         break;
       default:
-        this.addClickBtn(btn, btn.textContent);
+        this.addClickBtn(btn, btn.textContent, 1);
     }
 
     return btn;
@@ -165,6 +191,7 @@ export default class Keyboard {
     this.updateKeyboard();
 
     document.addEventListener('keydown', (event) => {
+      event.preventDefault();
       const btn = document.getElementById(`${event.code}`);
       if (btn) {
         btn.classList.add('keyboard__btn--active');
@@ -172,6 +199,7 @@ export default class Keyboard {
         const posStart = this.input.selectionStart;
         const posEnd = this.input.selectionEnd;
         const key = btn.id;
+        let newValue;
 
         switch (key) {
           case 'Backspace':
@@ -179,7 +207,7 @@ export default class Keyboard {
             if (!document.getSelection().focusNode) {
               this.updateInput(this.inputValue.substring(0, this.inputValue.length - 1), true);
             } else if (posStart !== 0) {
-              const newValue = this.inputValue.slice(0, posEnd - 1) + this.inputValue.slice(posEnd);
+              newValue = this.inputValue.slice(0, posEnd - 1) + this.inputValue.slice(posEnd);
               this.updateInput(newValue, true);
               this.input.setSelectionRange(posEnd - 1, posEnd - 1);
             }
@@ -188,7 +216,8 @@ export default class Keyboard {
             this.insertLetter(posStart, 4, '    ');
             break;
           case 'Delete':
-            const newValue = this.inputValue.slice(0, posStart) + this.inputValue.slice(posStart + 1);
+            newValue = this.inputValue.slice(0, posStart)
+              + this.inputValue.slice(posStart + 1);
             this.updateInput(newValue, true);
             this.input.setSelectionRange(posStart, posStart);
             break;
@@ -278,11 +307,11 @@ export default class Keyboard {
 
   updateKeyboard() {
     const rows = document.querySelectorAll('.keyboard__row');
-    // if (rows.length > 0) {
+    if (rows.length > 0) {
       rows.forEach((row) => {
         row.remove();
       });
-    // }
+    }
 
     this.createRow();
 
@@ -367,9 +396,15 @@ export default class Keyboard {
     }
   }
 
-  addClickBtn(element, text) {
-    element.addEventListener('click', () => {
-      this.updateInput(text, false);
+  addClickBtn(element, text, count) {
+    element.addEventListener('click', (event) => {
+      event.preventDefault();
+      const posEnd = this.input.selectionEnd;
+      const newValue = this.inputValue.slice(0, posEnd) + element.textContent
+        + this.inputValue.slice(posEnd);
+      this.updateInput(newValue, true);
+      this.input.focus();
+      this.input.setSelectionRange(posEnd + count, posEnd + count);
     });
   }
 

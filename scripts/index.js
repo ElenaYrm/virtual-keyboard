@@ -1,7 +1,7 @@
 import Keyboard from './keyboard.js';
 
 // create the main container
-export const container = document.createElement('main');
+const container = document.createElement('main');
 container.classList.add('container');
 document.body.appendChild(container);
 

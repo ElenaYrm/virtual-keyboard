@@ -10,5 +10,8 @@
   },
   "settings": {
     "import/extensions": ["never"]
+  },
+  "rules": {
+    "import/extensions": [0]
   }
 }
