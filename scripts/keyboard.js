@@ -5,7 +5,7 @@ import {
   keysRuShift,
 } from './constants.js';
 
-const regExp = /^[a-z а-я]$/i;
+const regExp = /^[a-z а-яё]$/i;
 
 export default class Keyboard {
   constructor() {
@@ -85,7 +85,7 @@ export default class Keyboard {
         });
         break;
       case 'Tab':
-        this.addClickBtn(btn, '\t');
+        this.addClickBtn(btn, '    ');
         break;
       case 'Delete':
         break;
@@ -145,74 +145,89 @@ export default class Keyboard {
     document.addEventListener('keydown', (event) => {
       event.preventDefault();
       const btn = document.getElementById(`${event.code}`);
-      const key = btn.id;
-      btn.classList.add('keyboard__btn--active');
-      switch (key) {
-        case 'Backspace':
-          this.updateInput(this.inputValue.substring(0, this.inputValue.length - 1), true);
-          break;
-        case 'Tab':
-          this.updateInput('\t');
-          break;
-        case 'Delete':
-          break;
-        case 'CapsLock':
-          this.isCapsLk = !this.isCapsLk;
-          this.checkCapsLk(btn);
-          break;
-        case 'Enter':
-          this.updateInput('\n');
-          break;
-        case 'ShiftLeft':
-          // this.changeShift();
-          break;
-        case 'ShiftRight':
-          // this.changeShift();
-          break;
-        case 'Space':
-          this.updateInput(' ');
-          break;
-        case 'ControlLeft':
-          this.isCtrl = !this.isCtrl;
-          break;
-        case 'ControlRight':
-          break;
-        case 'AltLeft':
-          if (this.isCtrl) {
-            this.setLanguage();
-            this.checkKeyboardType();
-          }
-          break;
-        case 'AltRight':
-          break;
-        case 'MetaLeft':
-          break;
-        default:
-          this.updateInput(btn.textContent);
+      if (btn) {
+        const key = btn.id;
+        btn.classList.add('keyboard__btn--active');
+        const posStart = this.input.selectionStart;
+        const posEnd = this.input.selectionEnd;
+        switch (key) {
+          case 'Backspace':
+            if (!document.getSelection().focusNode) {
+              this.updateInput(this.inputValue.substring(0, this.inputValue.length - 1), true);
+            } else if (posStart !== 0) {
+              const newValue = this.inputValue.slice(0, posEnd - 1) + this.inputValue.slice(posEnd);
+              this.updateInput(newValue, true);
+              this.input.setSelectionRange(posEnd - 1, posEnd - 1);
+            }
+            break;
+          case 'Tab':
+            this.insertLetter(posStart, 4, '    ');
+            break;
+          case 'Delete':
+            const newValue = this.inputValue.slice(0, posStart) + this.inputValue.slice(posStart + 1);
+            this.updateInput(newValue, true);
+            this.input.setSelectionRange(posStart, posStart);
+            break;
+          case 'CapsLock':
+            this.isCapsLk = !this.isCapsLk;
+            this.checkCapsLk(btn);
+            break;
+          case 'Enter':
+            this.insertLetter(posStart, 1, '\n');
+            break;
+          case 'ShiftLeft':
+            // this.changeShift();
+            break;
+          case 'ShiftRight':
+            // this.changeShift();
+            break;
+          case 'Space':
+            this.insertLetter(posStart, 1, ' ');
+            break;
+          case 'ControlLeft':
+            this.isCtrl = !this.isCtrl;
+            break;
+          case 'ControlRight':
+            break;
+          case 'AltLeft':
+            if (this.isCtrl) {
+              this.setLanguage();
+              this.checkKeyboardType();
+            }
+            break;
+          case 'AltRight':
+            break;
+          case 'MetaLeft':
+            break;
+          default:
+            this.insertLetter(posStart, 1, btn.textContent);
+        }
       }
     });
 
     document.addEventListener('keyup', (event) => {
       event.preventDefault();
       const btn = document.getElementById(`${event.code}`);
-      const key = btn.id;
-      switch (key) {
-        case 'ShiftLeft':
-          btn.classList.remove('keyboard__btn--active');
-          // this.changeShift();
-          break;
-        case 'ShiftRight':
-          btn.classList.remove('keyboard__btn--active');
-          // this.changeShift();
-          break;
-        case 'ControlLeft':
-          btn.classList.remove('keyboard__btn--active');
-          this.isCtrl = !this.isCtrl;
-          this.updateKeyboard();
-          this.checkCapsLk(btn);
-          break;
-        default:
-          btn.classList.remove('keyboard__btn--active');
+      if (btn) {
+        const key = btn.id;
+        switch (key) {
+          case 'ShiftLeft':
+            btn.classList.remove('keyboard__btn--active');
+            // this.changeShift();
+            break;
+          case 'ShiftRight':
+            btn.classList.remove('keyboard__btn--active');
+            // this.changeShift();
+            break;
+          case 'ControlLeft':
+            btn.classList.remove('keyboard__btn--active');
+            this.isCtrl = !this.isCtrl;
+            this.updateKeyboard();
+            this.checkCapsLk(btn);
+            break;
+          default:
+            btn.classList.remove('keyboard__btn--active');
+        }
       }
     });
 
@@ -308,10 +323,6 @@ export default class Keyboard {
     });
   }
 
-  addActiveBtnClass(element, key) {
-
-  }
-
   updateInput(value, isDelete) {
     if (isDelete) {
       this.inputValue = value;
@@ -319,6 +330,12 @@ export default class Keyboard {
       this.inputValue += value;
     }
     this.input.textContent = this.inputValue;
+  }
+
+  insertLetter(start, count, text) {
+    const newValue = this.inputValue.slice(0, start) + text + this.inputValue.slice(start);
+    this.updateInput(newValue, true);
+    this.input.setSelectionRange(start + count, start + count);
   }
 
   changeShift() {
