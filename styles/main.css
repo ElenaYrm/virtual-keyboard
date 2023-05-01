@@ -1,0 +1,197 @@
+/*var*/
+:root {
+  --primary-color: #ffffff;
+  --secondary-color: #78858a;
+  --thirdly-color: #485154;
+  --background-color: #d2d7d9;
+  --text-color: #363237;
+  --hover--color: #fd974f;
+}
+
+/*common*/
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+body {
+  min-width: 1024px;
+  font-family: sans-serif;
+  font-weight: 400;
+  font-size: 0.8em;
+  line-height: 100%;
+  color: var(--text-color);
+  background-color: var(--primary-color);
+}
+
+:active,
+:hover,
+:focus,
+:focus-visible {
+  outline: none;
+  outline-offset: 0;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.container {
+  max-width: 1024px;
+  padding: 30px 67px;
+  margin: 0 auto;
+}
+
+.title {
+  margin: 0 0 30px;
+  font-size: 30px;
+  text-align: center;
+}
+
+.subtitle {
+  margin: 0 0 18px;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.text {
+  margin-bottom: 30px;
+}
+
+.keyboard {
+  margin: 0 auto;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: var(--background-color);
+}
+
+.keyboard__row {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.keyboard__row:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.keyboard__btn {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-color);
+  background-color: var(--secondary-color);
+  text-align: center;
+  transition: border-radius 0.1s ease-in-out, background-color 0.1s ease-in-out;
+}
+
+.keyboard__btn:hover {
+  background-color: rgba(253, 151, 79, 0.5);
+}
+
+.keyboard__btn:active {
+  background-color: var(--hover--color);
+  border-radius: 50px;
+}
+
+.keyboard__btn--backspace {
+  width: 125px;
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--tab {
+  width: 61px;
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--delete {
+  width: 53px;
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--capsLk,
+.keyboard__btn--shift-left {
+  width: 123px;
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--capsLk {
+  position: relative;
+}
+
+.keyboard__btn--capsLk:after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+  background-color: var(--secondary-color);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.keyboard__btn--active-capsLk:after {
+  background-color: #00cf00;
+}
+
+.keyboard__btn--enter,
+.keyboard__btn--shift-right {
+  width: 106px;
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--space {
+  width: 412px;
+}
+
+.keyboard__btn--control {
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--arrow {
+  background-color: var(--text-color);
+}
+
+.keyboard__btn--upper-case {
+  text-transform: uppercase;
+}
+
+.keyboard__btn--lower-case {
+  text-transform: lowercase;
+}
+
+.keyboard__btn--active {
+  background-color: var(--hover--color);
+  border-radius: 50px;
+}
