@@ -19,10 +19,14 @@ export default class Keyboard {
     this.currentRow = null;
     // array of node of keyboard buttons
     this.keysButtons = [];
-    this.isCapsLk = false;
-    this.isShift = false;
-    this.isCtrl = false;
   }
+
+  isCapsLk = false;
+  isChangeCapsLk = false;
+  isLeftShift = false;
+  isRightShift = false;
+  isCtrl = false;
+  count = 0;
 
   initLanguage() {
     if (!localStorage.getItem('lang')) {
@@ -41,13 +45,13 @@ export default class Keyboard {
   }
 
   checkKeyboardType() {
-    if (this.lang === 'en' && !this.isShift) {
+    if (this.lang === 'en' && !this.isLeftShift && !this.isRightShift) {
       this.keys = keysEn;
-    } else if (this.lang === 'en' && this.isShift) {
+    } else if (this.lang === 'en' && (this.isLeftShift || this.isRightShift)) {
       this.keys = keysEnShift;
-    } else if (this.lang === 'ru' && !this.isShift) {
+    } else if (this.lang === 'ru' && !this.isLeftShift && !this.isRightShift) {
       this.keys = keysRu;
-    } else if (this.lang === 'ru' && this.isShift) {
+    } else if (this.lang === 'ru' && (this.isLeftShift || this.isRightShift)) {
       this.keys = keysRuShift;
     }
   }
@@ -100,18 +104,36 @@ export default class Keyboard {
         break;
       case 'ShiftLeft':
         btn.addEventListener('mousedown', () => {
-          // this.changeShift();
+          if (this.count === 0) {
+            this.isLeftShift = true;
+            this.changeShift();
+            this.count += 1;
+          }
+          if (this.isCapsLk) {
+            this.isCapsLk = false;
+            this.isChangeCapsLk = true;
+            this.checkCapsLk(btn);
+          }
         });
         btn.addEventListener('mouseup', () => {
-          // this.changeShift();
+          this.resetShift(btn);
         });
         break;
       case 'ShiftRight':
         btn.addEventListener('mousedown', () => {
-          // this.changeShift();
+          if (this.count === 0) {
+            this.isRightShift = true;
+            this.changeShift();
+            this.count += 1;
+          }
+          if (this.isCapsLk) {
+            this.isCapsLk = false;
+            this.isChangeCapsLk = true;
+            this.checkCapsLk(btn);
+          }
         });
         btn.addEventListener('mouseup', () => {
-          // this.changeShift();
+          this.resetShift(btn);
         });
         break;
       case 'Space':
@@ -143,15 +165,17 @@ export default class Keyboard {
     this.updateKeyboard();
 
     document.addEventListener('keydown', (event) => {
-      event.preventDefault();
       const btn = document.getElementById(`${event.code}`);
       if (btn) {
-        const key = btn.id;
         btn.classList.add('keyboard__btn--active');
+
         const posStart = this.input.selectionStart;
         const posEnd = this.input.selectionEnd;
+        const key = btn.id;
+
         switch (key) {
           case 'Backspace':
+            this.input.focus();
             if (!document.getSelection().focusNode) {
               this.updateInput(this.inputValue.substring(0, this.inputValue.length - 1), true);
             } else if (posStart !== 0) {
@@ -176,16 +200,34 @@ export default class Keyboard {
             this.insertLetter(posStart, 1, '\n');
             break;
           case 'ShiftLeft':
-            // this.changeShift();
+            if (this.count === 0) {
+              this.isLeftShift = true;
+              this.changeShift();
+              this.count += 1;
+            }
+            if (this.isCapsLk) {
+              this.isCapsLk = false;
+              this.isChangeCapsLk = true;
+              this.checkCapsLk(btn);
+            }
             break;
           case 'ShiftRight':
-            // this.changeShift();
+            if (this.count === 0) {
+              this.isRightShift = true;
+              this.changeShift();
+              this.count += 1;
+            }
+            if (this.isCapsLk) {
+              this.isCapsLk = false;
+              this.isChangeCapsLk = true;
+              this.checkCapsLk(btn);
+            }
             break;
           case 'Space':
             this.insertLetter(posStart, 1, ' ');
             break;
           case 'ControlLeft':
-            this.isCtrl = !this.isCtrl;
+            this.isCtrl = true;
             break;
           case 'ControlRight':
             break;
@@ -213,15 +255,15 @@ export default class Keyboard {
         switch (key) {
           case 'ShiftLeft':
             btn.classList.remove('keyboard__btn--active');
-            // this.changeShift();
+            this.resetShift(btn);
             break;
           case 'ShiftRight':
             btn.classList.remove('keyboard__btn--active');
-            // this.changeShift();
+            this.resetShift(btn);
             break;
           case 'ControlLeft':
             btn.classList.remove('keyboard__btn--active');
-            this.isCtrl = !this.isCtrl;
+            this.isCtrl = false;
             this.updateKeyboard();
             this.checkCapsLk(btn);
             break;
@@ -271,6 +313,8 @@ export default class Keyboard {
         element.classList.add('keyboard__btn--capsLk');
         if (this.isCapsLk) {
           element.classList.add('keyboard__btn--active-capsLk');
+        } else if (!this.isCapsLk && this.isChangeCapsLk) {
+          element.classList.add('keyboard__btn--active-capsLk');
         }
         break;
       case 'Enter':
@@ -278,9 +322,15 @@ export default class Keyboard {
         break;
       case 'ShiftLeft':
         element.classList.add('keyboard__btn--shift-left');
+        if (this.isLeftShift) {
+          element.classList.add('keyboard__btn--active');
+        }
         break;
       case 'ShiftRight':
         element.classList.add('keyboard__btn--shift-right');
+        if (this.isRightShift) {
+          element.classList.add('keyboard__btn--active');
+        }
         break;
       case 'Space':
         element.classList.add('keyboard__btn--space');
@@ -339,30 +389,44 @@ export default class Keyboard {
   }
 
   changeShift() {
-    this.isShift = !this.isShift;
     this.checkKeyboardType();
     this.updateKeyboard();
   }
 
-  changeCtrl() {
-    this.isCtrl = !this.isCtrl;
+  resetShift(element) {
+    this.isRightShift = false;
+    this.isLeftShift = false;
+    this.count = 0;
+    this.changeShift();
+
+    if (this.isChangeCapsLk) {
+      this.isCapsLk = true;
+      this.checkCapsLk(element);
+      this.isChangeCapsLk = false;
+    }
   }
 
   checkCapsLk(element) {
     if (this.isCapsLk) {
-      element.classList.add('keyboard__btn--active-capsLk');
       this.keysButtons.forEach((btn) => {
         if (regExp.test(btn.textContent)) {
           btn.textContent = btn.textContent.toUpperCase();
         }
       });
     } else {
-      element.classList.remove('keyboard__btn--active-capsLk');
       this.keysButtons.forEach((btn) => {
         if (regExp.test(btn.textContent)) {
           btn.textContent = btn.textContent.toLowerCase();
         }
       });
+    }
+
+    if (this.isCapsLk) {
+      element.classList.add('keyboard__btn--active-capsLk');
+    } else if (!this.isCapsLk && this.isChangeCapsLk) {
+      element.classList.add('keyboard__btn--active-capsLk');
+    } else {
+      element.classList.remove('keyboard__btn--active-capsLk');
     }
   }
 }
