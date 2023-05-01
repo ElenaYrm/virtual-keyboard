@@ -1,10 +1,11 @@
 /*var*/
 :root {
-  --primary-color: #eef0f6;
-  --secondary-color: #cfdaec;
-  --border-color: #9cb9d1;
-  --text-color: #094d74;
-  --hover--color: #759cd8;
+  --primary-color: #ffffff;
+  --secondary-color: #78858a;
+  --thirdly-color: #485154;
+  --background-color: #d2d7d9;
+  --text-color: #363237;
+  --hover--color: #fd974f;
 }
 
 /*common*/
@@ -60,16 +61,21 @@ ul {
 
 .container {
   max-width: 1024px;
-  padding: 30px 20px;
+  padding: 30px 67px;
   margin: 0 auto;
 }
 
 .title {
-
+  margin: 0 0 30px;
+  font-size: 30px;
+  text-align: center;
 }
 
 .subtitle {
-
+  margin: 0 0 18px;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
 }
 
 .text {
@@ -77,56 +83,107 @@ ul {
 }
 
 .keyboard {
+  margin: 0 auto;
   width: 100%;
   padding: 10px;
   border-radius: 5px;
-  background-color: var(--text-color);
+  background-color: var(--background-color);
 }
 
 .keyboard__row {
-  margin-bottom: 6px;
   width: 100%;
   display: flex;
   justify-content: space-between;
 }
 
+.keyboard__row:not(:last-child) {
+  margin-bottom: 10px;
+}
+
 .keyboard__btn {
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-color);
   background-color: var(--secondary-color);
+  text-align: center;
+  transition: border-radius 0.1s ease-in-out, background-color 0.1s ease-in-out;
+}
+
+.keyboard__btn:hover {
+  background-color: rgba(253, 151, 79, 0.7);
+}
+
+.keyboard__btn:active {
+  background-color: var(--hover--color);
+  border-radius: 50px;
+}
+
+.keyboard__btn--backspace {
+  width: 125px;
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--tab {
+  width: 61px;
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--delete {
+  width: 53px;
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--capsLk,
+.keyboard__btn--shift-left {
+  width: 123px;
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--capsLk {
+  position: relative;
+}
+
+.keyboard__btn--capsLk:after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 100%;
+  background-color: var(--secondary-color);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.keyboard__btn--active-capsLk:after {
+  background-color: greenyellow;
+}
+
+.keyboard__btn--enter,
+.keyboard__btn--shift-right {
+  width: 106px;
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--space {
+  width: 412px;
+}
+
+.keyboard__btn--control {
+  background-color: var(--thirdly-color);
+}
+
+.keyboard__btn--arrow {
+  background-color: var(--text-color);
 }
 
 .keyboard__btn--active {
   background-color: var(--hover--color);
-}
-
-.keyboard__btn--backspace {
-  width: 120px;
-}
-
-.keyboard__btn--tab {
-  width: 80px;
-}
-
-.keyboard__btn--capsLk {
-  width: 106px;
-}
-
-.keyboard__btn--active-capsLk {
-  background-color: green;
-}
-
-.keyboard__btn--enter {
-  width: 106px;
-}
-
-.keyboard__btn--shift {
-  width: 124px;
-}
-
-.keyboard__btn--space {
-  width: 450px;
+  border-radius: 50px;
 }

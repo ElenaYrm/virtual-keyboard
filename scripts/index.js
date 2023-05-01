@@ -7,6 +7,7 @@ document.body.appendChild(container);
 
 // create and append titles
 const title = document.createElement('h1');
+title.classList.add('title');
 title.textContent = 'Виртуальная клавиатура';
 const subtitle = document.createElement('p');
 subtitle.classList.add('subtitle');

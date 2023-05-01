@@ -75,7 +75,7 @@ export default class Keyboard {
               this.updateInput('\t');
               break;
             case 'Delete':
-              console.log('delete');
+              btn.classList.add('keyboard__btn--delete');
               break;
             case 'CapsLock':
               btn.classList.add('keyboard__btn--capsLk');
@@ -87,11 +87,11 @@ export default class Keyboard {
               this.updateInput('\n');
               break;
             case 'ShiftLeft':
-              btn.classList.add('keyboard__btn--shift');
-              this.changeShift();
+              btn.classList.add('keyboard__btn--shift-left');
+              // this.changeShift();
               break;
             case 'ShiftRight':
-              btn.classList.add('keyboard__btn--shift');
+              btn.classList.add('keyboard__btn--shift-right');
               // this.changeShift();
               break;
             case 'Space':
@@ -99,14 +99,35 @@ export default class Keyboard {
               this.updateInput(' ');
               break;
             case 'ControlLeft':
+              btn.classList.add('keyboard__btn--control');
               break;
             case 'ControlRight':
+              btn.classList.add('keyboard__btn--control');
               break;
             case 'AltLeft':
+              btn.classList.add('keyboard__btn--control');
               break;
             case 'AltRight':
+              btn.classList.add('keyboard__btn--control');
               break;
             case 'MetaLeft':
+              btn.classList.add('keyboard__btn--control');
+              break;
+            case 'ArrowUp':
+              btn.classList.add('keyboard__btn--arrow');
+              this.updateInput(btn.textContent);
+              break;
+            case 'ArrowDown':
+              btn.classList.add('keyboard__btn--arrow');
+              this.updateInput(btn.textContent);
+              break;
+            case 'ArrowLeft':
+              btn.classList.add('keyboard__btn--arrow');
+              this.updateInput(btn.textContent);
+              break;
+            case 'ArrowRight':
+              btn.classList.add('keyboard__btn--arrow');
+              this.updateInput(btn.textContent);
               break;
             default:
               this.updateInput(btn.textContent);
@@ -185,8 +206,8 @@ export default class Keyboard {
   createTextarea() {
     const textArea = document.createElement('textarea');
     textArea.classList.add('text');
-    textArea.rows = 10;
-    textArea.cols = 150;
+    textArea.rows = 15;
+    textArea.cols = 135;
     textArea.textContent = this.inputValue;
     this.input = textArea;
 
@@ -222,7 +243,7 @@ export default class Keyboard {
         });
         break;
       case 'Delete':
-        console.log('delete');
+        btn.classList.add('keyboard__btn--delete');
         break;
       case 'CapsLock':
         btn.classList.add('keyboard__btn--capsLk');
@@ -241,7 +262,7 @@ export default class Keyboard {
         });
         break;
       case 'ShiftLeft':
-        btn.classList.add('keyboard__btn--shift');
+        btn.classList.add('keyboard__btn--shift-left');
         btn.addEventListener('mousedown', () => {
           // this.changeShift();
         });
@@ -250,7 +271,7 @@ export default class Keyboard {
         });
         break;
       case 'ShiftRight':
-        btn.classList.add('keyboard__btn--shift');
+        btn.classList.add('keyboard__btn--shift-right');
         btn.addEventListener('mousedown', () => {
           // this.changeShift();
         });
@@ -265,14 +286,43 @@ export default class Keyboard {
         });
         break;
       case 'ControlLeft':
+        btn.classList.add('keyboard__btn--control');
         break;
       case 'ControlRight':
+        btn.classList.add('keyboard__btn--control');
         break;
       case 'AltLeft':
+        btn.classList.add('keyboard__btn--control');
         break;
       case 'AltRight':
+        btn.classList.add('keyboard__btn--control');
         break;
       case 'MetaLeft':
+        btn.classList.add('keyboard__btn--control');
+        break;
+      case 'ArrowUp':
+        btn.classList.add('keyboard__btn--arrow');
+        btn.addEventListener('click', () => {
+          this.updateInput(btn.textContent);
+        });
+        break;
+      case 'ArrowDown':
+        btn.classList.add('keyboard__btn--arrow');
+        btn.addEventListener('click', () => {
+          this.updateInput(btn.textContent);
+        });
+        break;
+      case 'ArrowLeft':
+        btn.classList.add('keyboard__btn--arrow');
+        btn.addEventListener('click', () => {
+          this.updateInput(btn.textContent);
+        });
+        break;
+      case 'ArrowRight':
+        btn.classList.add('keyboard__btn--arrow');
+        btn.addEventListener('click', () => {
+          this.updateInput(btn.textContent);
+        });
         break;
       default:
         btn.addEventListener('click', () => {
