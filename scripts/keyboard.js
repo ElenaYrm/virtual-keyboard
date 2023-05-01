@@ -21,6 +21,7 @@ export default class Keyboard {
     this.keysButtons = [];
     this.isCapsLk = false;
     this.isShift = false;
+    this.isCtrl = false;
   }
 
   initLanguage() {
@@ -51,6 +52,88 @@ export default class Keyboard {
     }
   }
 
+  createTextarea() {
+    const textArea = document.createElement('textarea');
+    textArea.classList.add('text');
+    textArea.rows = 15;
+    textArea.cols = 135;
+    textArea.textContent = this.inputValue;
+    this.input = textArea;
+
+    return this.input;
+  }
+
+  createRow() {
+    const row = document.createElement('div');
+    row.classList.add('keyboard__row');
+    this.keysContainer.appendChild(row);
+    this.currentRow = row;
+  }
+
+  createBtn(key, value) {
+    const btn = document.createElement('button');
+    btn.textContent = value;
+    btn.id = key;
+    btn.classList.add('keyboard__btn');
+    this.addBtnClass(btn, key);
+
+    // add event listener on click to buttons
+    switch (key) {
+      case 'Backspace':
+        btn.addEventListener('click', () => {
+          this.updateInput(this.inputValue.substring(0, this.inputValue.length - 1), true);
+        });
+        break;
+      case 'Tab':
+        this.addClickBtn(btn, '\t');
+        break;
+      case 'Delete':
+        break;
+      case 'CapsLock':
+        btn.addEventListener('click', () => {
+          this.isCapsLk = !this.isCapsLk;
+          this.checkCapsLk(btn);
+        });
+        break;
+      case 'Enter':
+        this.addClickBtn(btn, '\n');
+        break;
+      case 'ShiftLeft':
+        btn.addEventListener('mousedown', () => {
+          // this.changeShift();
+        });
+        btn.addEventListener('mouseup', () => {
+          // this.changeShift();
+        });
+        break;
+      case 'ShiftRight':
+        btn.addEventListener('mousedown', () => {
+          // this.changeShift();
+        });
+        btn.addEventListener('mouseup', () => {
+          // this.changeShift();
+        });
+        break;
+      case 'Space':
+        this.addClickBtn(btn, ' ');
+        break;
+      case 'ControlLeft':
+        break;
+      case 'ControlRight':
+        break;
+      case 'AltLeft':
+        break;
+      case 'AltRight':
+        break;
+      case 'MetaLeft':
+        break;
+      default:
+        this.addClickBtn(btn, btn.textContent);
+    }
+
+    return btn;
+  }
+
   init() {
     const keysContainer = document.createElement('div');
     keysContainer.classList.add('keyboard');
@@ -61,100 +144,76 @@ export default class Keyboard {
 
     document.addEventListener('keydown', (event) => {
       event.preventDefault();
-      this.keysButtons.forEach((btn) => {
-        const key = btn.id;
-        if (event.code === key) {
-          btn.classList.add('keyboard__btn--active');
-          switch (key) {
-            case 'Backspace':
-              btn.classList.add('keyboard__btn--backspace');
-              this.updateInput(this.inputValue.substring(0, this.inputValue.length - 1), true);
-              break;
-            case 'Tab':
-              btn.classList.add('keyboard__btn--tab');
-              this.updateInput('\t');
-              break;
-            case 'Delete':
-              btn.classList.add('keyboard__btn--delete');
-              break;
-            case 'CapsLock':
-              btn.classList.add('keyboard__btn--capsLk');
-              this.isCapsLk = !this.isCapsLk;
-              this.checkCapsLk(btn);
-              break;
-            case 'Enter':
-              btn.classList.add('keyboard__btn--enter');
-              this.updateInput('\n');
-              break;
-            case 'ShiftLeft':
-              btn.classList.add('keyboard__btn--shift-left');
-              // this.changeShift();
-              break;
-            case 'ShiftRight':
-              btn.classList.add('keyboard__btn--shift-right');
-              // this.changeShift();
-              break;
-            case 'Space':
-              btn.classList.add('keyboard__btn--space');
-              this.updateInput(' ');
-              break;
-            case 'ControlLeft':
-              btn.classList.add('keyboard__btn--control');
-              break;
-            case 'ControlRight':
-              btn.classList.add('keyboard__btn--control');
-              break;
-            case 'AltLeft':
-              btn.classList.add('keyboard__btn--control');
-              break;
-            case 'AltRight':
-              btn.classList.add('keyboard__btn--control');
-              break;
-            case 'MetaLeft':
-              btn.classList.add('keyboard__btn--control');
-              break;
-            case 'ArrowUp':
-              btn.classList.add('keyboard__btn--arrow');
-              this.updateInput(btn.textContent);
-              break;
-            case 'ArrowDown':
-              btn.classList.add('keyboard__btn--arrow');
-              this.updateInput(btn.textContent);
-              break;
-            case 'ArrowLeft':
-              btn.classList.add('keyboard__btn--arrow');
-              this.updateInput(btn.textContent);
-              break;
-            case 'ArrowRight':
-              btn.classList.add('keyboard__btn--arrow');
-              this.updateInput(btn.textContent);
-              break;
-            default:
-              this.updateInput(btn.textContent);
+      const btn = document.getElementById(`${event.code}`);
+      const key = btn.id;
+      btn.classList.add('keyboard__btn--active');
+      switch (key) {
+        case 'Backspace':
+          this.updateInput(this.inputValue.substring(0, this.inputValue.length - 1), true);
+          break;
+        case 'Tab':
+          this.updateInput('\t');
+          break;
+        case 'Delete':
+          break;
+        case 'CapsLock':
+          this.isCapsLk = !this.isCapsLk;
+          this.checkCapsLk(btn);
+          break;
+        case 'Enter':
+          this.updateInput('\n');
+          break;
+        case 'ShiftLeft':
+          // this.changeShift();
+          break;
+        case 'ShiftRight':
+          // this.changeShift();
+          break;
+        case 'Space':
+          this.updateInput(' ');
+          break;
+        case 'ControlLeft':
+          this.isCtrl = !this.isCtrl;
+          break;
+        case 'ControlRight':
+          break;
+        case 'AltLeft':
+          if (this.isCtrl) {
+            this.setLanguage();
+            this.checkKeyboardType();
           }
-        }
-      });
+          break;
+        case 'AltRight':
+          break;
+        case 'MetaLeft':
+          break;
+        default:
+          this.updateInput(btn.textContent);
+      }
     });
 
     document.addEventListener('keyup', (event) => {
       event.preventDefault();
-      this.keysButtons.forEach((btn) => {
-        const key = btn.id;
-        if (event.code === key) {
-          switch (key) {
-            case 'ShiftLeft':
-              btn.classList.remove('keyboard__btn--active');
-              // this.changeShift();
-              break;
-            case 'ShiftRight':
-              btn.classList.remove('keyboard__btn--active');
-              // this.changeShift();
-              break;
-            default:
-              btn.classList.remove('keyboard__btn--active');
-          }
-        }
-      });
+      const btn = document.getElementById(`${event.code}`);
+      const key = btn.id;
+      switch (key) {
+        case 'ShiftLeft':
+          btn.classList.remove('keyboard__btn--active');
+          // this.changeShift();
+          break;
+        case 'ShiftRight':
+          btn.classList.remove('keyboard__btn--active');
+          // this.changeShift();
+          break;
+        case 'ControlLeft':
+          btn.classList.remove('keyboard__btn--active');
+          this.isCtrl = !this.isCtrl;
+          this.updateKeyboard();
+          this.checkCapsLk(btn);
+          break;
+        default:
+          btn.classList.remove('keyboard__btn--active');
+      }
     });
 
     return this.keysContainer;
@@ -162,9 +221,11 @@ export default class Keyboard {
 
   updateKeyboard() {
     const rows = document.querySelectorAll('.keyboard__row');
-    rows.forEach((row) => {
-      row.remove();
-    });
+    // if (rows.length > 0) {
+      rows.forEach((row) => {
+        row.remove();
+      });
+    // }
 
     this.createRow();
 
@@ -177,6 +238,97 @@ export default class Keyboard {
         this.createRow();
       }
     });
+  }
+
+  // support functions
+  addBtnClass(element, key) {
+    switch (key) {
+      case 'Backspace':
+        element.classList.add('keyboard__btn--backspace');
+        break;
+      case 'Tab':
+        element.classList.add('keyboard__btn--tab');
+        break;
+      case 'Delete':
+        element.classList.add('keyboard__btn--delete');
+        break;
+      case 'CapsLock':
+        element.classList.add('keyboard__btn--capsLk');
+        if (this.isCapsLk) {
+          element.classList.add('keyboard__btn--active-capsLk');
+        }
+        break;
+      case 'Enter':
+        element.classList.add('keyboard__btn--enter');
+        break;
+      case 'ShiftLeft':
+        element.classList.add('keyboard__btn--shift-left');
+        break;
+      case 'ShiftRight':
+        element.classList.add('keyboard__btn--shift-right');
+        break;
+      case 'Space':
+        element.classList.add('keyboard__btn--space');
+        break;
+      case 'ControlLeft':
+        element.classList.add('keyboard__btn--control');
+        break;
+      case 'ControlRight':
+        element.classList.add('keyboard__btn--control');
+        break;
+      case 'AltLeft':
+        element.classList.add('keyboard__btn--control');
+        break;
+      case 'AltRight':
+        element.classList.add('keyboard__btn--control');
+        break;
+      case 'MetaLeft':
+        element.classList.add('keyboard__btn--control');
+        break;
+      case 'ArrowUp':
+        element.classList.add('keyboard__btn--arrow');
+        break;
+      case 'ArrowDown':
+        element.classList.add('keyboard__btn--arrow');
+        break;
+      case 'ArrowLeft':
+        element.classList.add('keyboard__btn--arrow');
+        break;
+      case 'ArrowRight':
+        element.classList.add('keyboard__btn--arrow');
+        break;
+      default:
+        break;
+    }
+  }
+
+  addClickBtn(element, text) {
+    element.addEventListener('click', () => {
+      this.updateInput(text, false);
+    });
+  }
+
+  addActiveBtnClass(element, key) {
+
+  }
+
+  updateInput(value, isDelete) {
+    if (isDelete) {
+      this.inputValue = value;
+    } else {
+      this.inputValue += value;
+    }
+    this.input.textContent = this.inputValue;
+  }
+
+  changeShift() {
+    this.isShift = !this.isShift;
+    this.checkKeyboardType();
+    this.updateKeyboard();
+  }
+
+  changeCtrl() {
+    this.isCtrl = !this.isCtrl;
   }
 
   checkCapsLk(element) {
@@ -195,148 +347,5 @@ export default class Keyboard {
         }
       });
     }
-  }
-
-  changeShift() {
-    this.isShift = !this.isShift;
-    this.checkKeyboardType();
-    this.updateKeyboard();
-  }
-
-  createTextarea() {
-    const textArea = document.createElement('textarea');
-    textArea.classList.add('text');
-    textArea.rows = 15;
-    textArea.cols = 135;
-    textArea.textContent = this.inputValue;
-    this.input = textArea;
-
-    return this.input;
-  }
-
-  updateInput(value, isDelete = false) {
-    if (isDelete) {
-      this.inputValue = value;
-    } else {
-      this.inputValue += value;
-    }
-    this.input.textContent = this.inputValue;
-  }
-
-  createBtn(key, value) {
-    const btn = document.createElement('button');
-    btn.textContent = value;
-    btn.id = key;
-    btn.classList.add('keyboard__btn');
-
-    switch (key) {
-      case 'Backspace':
-        btn.classList.add('keyboard__btn--backspace');
-        btn.addEventListener('click', () => {
-          this.updateInput(this.inputValue.substring(0, this.inputValue.length - 1), true);
-        });
-        break;
-      case 'Tab':
-        btn.classList.add('keyboard__btn--tab');
-        btn.addEventListener('click', () => {
-          this.updateInput('\t');
-        });
-        break;
-      case 'Delete':
-        btn.classList.add('keyboard__btn--delete');
-        break;
-      case 'CapsLock':
-        btn.classList.add('keyboard__btn--capsLk');
-        if (this.isCapsLk) {
-          btn.classList.add('keyboard__btn--active-capsLk');
-        }
-        btn.addEventListener('click', () => {
-          this.isCapsLk = !this.isCapsLk;
-          this.checkCapsLk(btn);
-        });
-        break;
-      case 'Enter':
-        btn.classList.add('keyboard__btn--enter');
-        btn.addEventListener('click', () => {
-          this.updateInput('\n');
-        });
-        break;
-      case 'ShiftLeft':
-        btn.classList.add('keyboard__btn--shift-left');
-        btn.addEventListener('mousedown', () => {
-          // this.changeShift();
-        });
-        btn.addEventListener('mouseup', () => {
-          // this.changeShift();
-        });
-        break;
-      case 'ShiftRight':
-        btn.classList.add('keyboard__btn--shift-right');
-        btn.addEventListener('mousedown', () => {
-          // this.changeShift();
-        });
-        btn.addEventListener('mouseup', () => {
-          // this.changeShift();
-        });
-        break;
-      case 'Space':
-        btn.classList.add('keyboard__btn--space');
-        btn.addEventListener('click', () => {
-          this.updateInput(' ');
-        });
-        break;
-      case 'ControlLeft':
-        btn.classList.add('keyboard__btn--control');
-        break;
-      case 'ControlRight':
-        btn.classList.add('keyboard__btn--control');
-        break;
-      case 'AltLeft':
-        btn.classList.add('keyboard__btn--control');
-        break;
-      case 'AltRight':
-        btn.classList.add('keyboard__btn--control');
-        break;
-      case 'MetaLeft':
-        btn.classList.add('keyboard__btn--control');
-        break;
-      case 'ArrowUp':
-        btn.classList.add('keyboard__btn--arrow');
-        btn.addEventListener('click', () => {
-          this.updateInput(btn.textContent);
-        });
-        break;
-      case 'ArrowDown':
-        btn.classList.add('keyboard__btn--arrow');
-        btn.addEventListener('click', () => {
-          this.updateInput(btn.textContent);
-        });
-        break;
-      case 'ArrowLeft':
-        btn.classList.add('keyboard__btn--arrow');
-        btn.addEventListener('click', () => {
-          this.updateInput(btn.textContent);
-        });
-        break;
-      case 'ArrowRight':
-        btn.classList.add('keyboard__btn--arrow');
-        btn.addEventListener('click', () => {
-          this.updateInput(btn.textContent);
-        });
-        break;
-      default:
-        btn.addEventListener('click', () => {
-          this.updateInput(btn.textContent);
-        });
-    }
-
-    return btn;
-  }
-
-  createRow() {
-    const row = document.createElement('div');
-    row.classList.add('keyboard__row');
-    this.keysContainer.appendChild(row);
-    this.currentRow = row;
   }
 }

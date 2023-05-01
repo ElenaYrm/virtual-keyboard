@@ -14,7 +14,7 @@ subtitle.classList.add('subtitle');
 subtitle.textContent = 'Клавиатура создана в операционной системе Windows';
 const info = document.createElement('p');
 info.classList.add('subtitle');
-info.textContent = 'Для переключения языка комбинация: левые Shift + Alt';
+info.textContent = 'Для переключения языка комбинация: левые Ctrl + Alt';
 
 container.appendChild(title);
 container.appendChild(subtitle);

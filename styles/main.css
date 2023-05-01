@@ -162,7 +162,7 @@ ul {
 }
 
 .keyboard__btn--active-capsLk:after {
-  background-color: greenyellow;
+  background-color: #00cf00;
 }
 
 .keyboard__btn--enter,
